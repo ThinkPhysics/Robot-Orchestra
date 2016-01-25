@@ -1,73 +1,85 @@
+// Robot Orchestra workshop code
+// Drives one, two (or more, potentially) servos in a repeating beat pattern
+// Author: Jonathan Sanderson, for Think Physics, Northumbria University
+// Version: 2016-01-25
+
 #include <Servo.h>
 
-// ServoTwitch v0.3 20/7/2015 Jonathan Sanderson / Think Physics / Northumbria University
+// Pin setup and generate servo objects
+int ledPin = 3;
+const byte N_SERVOS = 2;
+const byte servoPin[N_SERVOS] = {9, 10};
+Servo servo[N_SERVOS];
 
-// Start by setting up the servo and pinouts
-Servo myServo1;
-int servoPin1 = 9;  // Servo1 will be on pin 9
-
-Servo myServo2;
-int servoPin2 = 10; // Servo2 will be on pin 10
-
-int ledPin1 = 3;    // LED is on pin 3
-
-// Now to define the beat sequence
-const int noBeats = 16; // Number of beats in measure
-int beats1[noBeats] = {1, 0,0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0};
-int beats2[noBeats] = {1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0,};
+// Beat configuration. Edit the arrays to alter the beat/miss pattern.
+// Ensure number of beats matches N_BEATS or there'll be an error.
+const int N_BEATS = 16;
+int beats[N_SERVOS][N_BEATS] = { { 1, 0, 0, 0, 
+                                   1, 0, 0, 0,
+                                   1, 0, 0, 0, 
+                                   1, 0, 0, 0},
+                                   
+                                 { 1, 0, 1, 0,
+                                   1, 0, 0, 0,
+                                   1, 0, 1, 0,
+                                   1, 1, 0, 0 } };
 
 // Define how far the servo moves (same for each servo)
+// Fiddling with this is rare, and note that the servo rarely has time to reach angleTwitch
 const int angleRest = 0;          // Initial angle of servo
 const int angleTwitch = 180;      // Deflection target angle if we're playing a beat
 const int angleMiss = 05;         // Deflection target angle if we're playing a miss, not a beat
-const int angleTwitchReverse = 0; // Not used
+const int angleTwitchReverse = 0; // Not used in this code version
 
-// Precalculate some playback speed stuff
-float bpm = 160.0;  // Used to calculate delays. Can speed up playback by increasing, but
-                    // servo may not have time to reach chosen deflection if >~120
-int tempo = (int) ( (60 / bpm) * 1000 ); // cast result to integer
-
+// Define playback speed in beats per minute, and a tempo (beat duration) from that
+const int bpm = 120;
+const int tempo = (int) ( 1000 / (bpm/60) ); // milliseconds
 
 void setup() {
-  myServo1.attach(servoPin1); // Attach servo
-  myServo2.attach(servoPin2); // Attach servo2 
-  pinMode(ledPin1, OUTPUT);   // Set LED output
-  myServo1.write(angleRest);  // Set servo to neutral position
-  myServo2.write(angleRest);  // Set servo to neutral position
-  delay(200);                 // Wait for servo to reach neutral
+  // Initialise the servo objects, and send them to the rest position
+  for (int i = 0; i < N_SERVOS; i++) {
+    servo[i].attach(servoPin[i]);
+    servo[i].write(angleRest);
+  }  
+  pinMode(ledPin, OUTPUT); // Set up the LED pin
+  delay(200);              // Brief pause to give servos time to move to rest
 }
 
 void loop() {
-  // Main loop is really nasty now, with nested if/else to handle both servos. There
-  // are many better ways of doing this, doubtless.
-  for ( int i = 0; i < noBeats ; i++) {
-    if (beats1[i] == 1) {
-      twitch(myServo1, angleTwitch);
-      if (beats2[i] == 1) {
-        twitch(myServo2, angleTwitch);
+  // Loop through the beat array
+  for ( int beat = 0 ; beat < N_BEATS ; beat++ ) {
+
+    // Loop through the servos
+    for ( int channel = 0 ; channel < N_SERVOS ; channel++ ) {
+      if ( beats[channel][beat] == 1 ) {
+        twitch(servo[channel], angleTwitch); // Play a hit
       } else {
-        twitch(myServo2, angleMiss);
+        twitch(servo[channel], angleMiss);   // Play a miss
       }
-    } else {
-      twitch(myServo1, angleMiss);    // if we're not playing a beat, play a miss so code paths take same time
-      if (beats2[i] == 1) {
-        twitch(myServo2, angleTwitch);
-      } else {
-        twitch(myServo2, angleMiss);
-      }
+    } 
+    
+    delay(150); // Give the servos time to move
+
+    // Return the servos to rest position
+    for ( int channel = 0 ; channel < N_SERVOS ; channel++ ) {
+      twitch(servo[channel], angleRest);
     }
-    digitalWrite(ledPin1, HIGH);  // Flash LED
-    delay(50);                    // ...briefly
-    digitalWrite(ledPin1, HIGH);   // LED on
+
+    delay(tempo-(200)); // give the servos time to move back, correcting for desired tempo
+
+    // Now flash the LED
+    digitalWrite(ledPin, HIGH); // LED ON
+    delay(50);                  // Pause so we see flash
+    digitalWrite(ledPin, LOW);  // LED OFF
   }
 }
 
 // twitch function to handle servo deflection. Dereferences address of servo not-really-object
-// ...which is one of those C things that makes little sense. Just leave the &theServo as it is,
-// it works.
+// ...which is one of those C things that makes little sense. 
+// In an earlier version, this function paused and returned the servo to angleRest, but that
+// made simultaneous movement of multiple servos impossible. So that aspect was pulled back
+// into the main loop. An observer might claim that this function is, therefore, completely pointless.
 void twitch(Servo &theServo, int angle) {
-  theServo.write(angle);      // Move towards chosen angle
-  delay(100);
-  theServo.write(angleRest);  // Return to rest position
-  delay(tempo - 150); //trying to fudge to make up for the servo call time/delay
+  theServo.write(angle); // Move towards chosen angle
 }
+
