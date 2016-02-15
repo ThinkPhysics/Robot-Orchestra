@@ -1,14 +1,16 @@
 // Robot Orchestra workshop code
+// Shrimp version, with pinouts amended for easier construction on
+// mini breadboard.
 // Drives one, two (or more, potentially) servos in a repeating beat pattern
 // Author: Jonathan Sanderson, for Think Physics, Northumbria University
-// Version: 2016-01-25
+// Version: 1, 2016-02-15
 
 #include <Servo.h>
 
 // Pin setup and generate servo objects
-int ledPin = 3;
-const byte N_SERVOS = 2; 
-const byte servoPin[N_SERVOS] = {9, 10};
+int ledPin = 6;
+const byte N_SERVOS = 1; 
+const byte servoPin[N_SERVOS] = {9};
 Servo servo[N_SERVOS];
 
 // Beat configuration. Edit the arrays to alter the beat/miss pattern.
@@ -17,12 +19,7 @@ const int N_BEATS = 16;
 int beats[N_SERVOS][N_BEATS] = { { 1, 0, 0, 0, 
                                    1, 0, 0, 0,
                                    1, 0, 0, 0, 
-                                   1, 0, 0, 0},
-                                   
-                                 { 1, 0, 1, 0,
-                                   1, 0, 0, 0,
-                                   1, 0, 1, 0,
-                                   1, 1, 0, 0 } };
+                                   1, 0, 0, 0} };
 
 // Define how far the servo moves (same for each servo)
 // Fiddling with this is rare, and note that the servo rarely has time to reach angleTwitch
