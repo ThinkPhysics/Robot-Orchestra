@@ -15,14 +15,14 @@ Servo servo[N_SERVOS];
 // Ensure number of beats matches N_BEATS or there'll be an error.
 const int N_BEATS = 16;
 int beats[N_SERVOS][N_BEATS] = { { 1, 0, 0, 0, 
-                                   1, 0, 0, 0,
+                                   1, 0, 1, 0,
                                    1, 0, 0, 0, 
-                                   1, 0, 0, 0},
+                                   1, 0, 1, 0},
                                    
                                  { 1, 0, 1, 0,
                                    1, 0, 0, 0,
-                                   1, 0, 1, 0,
-                                   1, 1, 0, 0 } };
+                                   1, 0, 1, 1,
+                                   0, 1, 0, 1 } };
 
 // Define how far the servo moves (same for each servo)
 // Fiddling with this is rare, and note that the servo rarely has time to reach angleTwitch
@@ -32,6 +32,7 @@ const int angleMiss = 05;         // Deflection target angle if we're playing a 
 const int angleTwitchReverse = 0; // Not used in this code version
 
 // Define playback speed in beats per minute, and a tempo (beat duration) from that
+// Note that fast tempos give less time for the servo to move, so may lead to weak hits.
 const int bpm = 120;
 const int tempo = (int) ( 1000 / (bpm/60) ); // milliseconds
 
