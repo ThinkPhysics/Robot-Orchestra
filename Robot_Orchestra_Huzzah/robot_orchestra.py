@@ -1,6 +1,8 @@
 """Robot Orchestra server code.
 
-Distributes and commands network of robots to play instruments
+Distributes and commands network of robots to play instruments.
+
+TODO: Function to upload beat pattern to subset (array) of instruments.
 """
 import paho.mqtt.client as mqtt
 import time
@@ -13,7 +15,6 @@ def message(topic, payload):
     """
     mqtt.connect('localhost', 1883)
     mqtt.publish("orchestra/" + topic, payload)
-
 
 def setup():
     """Configure all the Skutters initially."""
