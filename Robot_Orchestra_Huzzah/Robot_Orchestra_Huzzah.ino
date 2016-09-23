@@ -23,11 +23,11 @@ const char* mqtt_server = "10.0.1.4";
 // These variables will store those names.
 String huzzahMACAddress;
 String skutterNameString;
-char skutterNameArray[25];
+char skutterNameArray[60];
 
 // String variables in which to store the received messages
 String subsTargetString;
-char subsTargetArray[34];
+char subsTargetArray[60];
 
 // Is this Skutter robot currently selected as active, or not?
 bool active = false;
@@ -45,6 +45,7 @@ Servo myservo;
 // +1 to allow for NULL termination of received beat pattern
 const int N_BEATS = 16;
 char beats[N_BEATS+1] = {};
+String beatsString;
 
 // Define how far the servo moves
 // Fiddling with this is rare, and note that the servo rarely has time to reach angleTwitch
@@ -67,10 +68,10 @@ void setup() {
   huzzahMACAddress = WiFi.macAddress();
   skutterNameString = "skutter_" + huzzahMACAddress;
   Serial.println(skutterNameString);
-  skutterNameString.toCharArray(skutterNameArray, 25);
+  skutterNameString.toCharArray(skutterNameArray, 60);
   subsTargetString = "orchestra/" + skutterNameString;
-  subsTargetString.toCharArray(subsTargetArray, 34);
-  for (int i = 0; i < 34; i++) {
+  subsTargetString.toCharArray(subsTargetArray, 60);
+  for (int i = 0; i < 60; i++) {
     Serial.print(subsTargetArray[i]);
   }
   Serial.println();
@@ -149,6 +150,8 @@ void callback(char* topic, byte* payload, unsigned int length) {
   if ( (topicString == "orchestra/beats") && active ) {
      // process received beat pattern into beats array
      payloadString.toCharArray(beats, N_BEATS);
+     // Serial.println(beats);
+     beatsString = beats;
   }
 
   /* HANDLE PLAYBACK CUE **************************************/
@@ -157,11 +160,18 @@ void callback(char* topic, byte* payload, unsigned int length) {
     // Loop through the beat array
     for ( int beat = 0 ; beat < N_BEATS ; beat++ ) {
       // Oh, how I love C pointers. The following line took half an hour.
-      int this_beat = atoi(&beats[beat]);
-      if ( this_beat == 1 ) {
+      // ...and then didn't work.
+      // int this_beat = atoi(&beats[beat]);
+      // Back to comparing Strings, because *that's* efficient. Sigh.
+      // String this_beat = &beats[beat];
+      String this_beat = beatsString.charAt[beat];
+      Serial.println(this_beat);
+      if ( this_beat == "1" ) {
         twitch(myservo, angleTwitch); // Play a hit
+        Serial.println(F("BONG!"));
       } else {
         twitch(myservo, angleMiss);   // Play a miss
+        Serial.println(F("pish!"));
       }
     } 
     

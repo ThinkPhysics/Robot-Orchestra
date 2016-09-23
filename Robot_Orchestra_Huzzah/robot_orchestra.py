@@ -7,14 +7,16 @@ TODO: Function to upload beat pattern to subset (array) of instruments.
 import paho.mqtt.client as mqtt
 import time
 
+mqttc = mqtt.Client()
 
 def message(topic, payload):
     """Abstract out MQTT connection.
 
     Since it has to be done for each message, wrap it in a function
     """
-    mqtt.connect('localhost', 1883)
-    mqtt.publish("orchestra/" + topic, payload)
+    mqttc.connect('localhost', 1883)
+    mqttc.publish("orchestra/" + topic, payload)
+
 
 def setup():
     """Configure all the Skutters initially."""
