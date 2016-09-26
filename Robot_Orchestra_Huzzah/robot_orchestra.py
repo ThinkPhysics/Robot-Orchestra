@@ -23,7 +23,7 @@ def setup():
     message("skutter_18:FE:34:FD:91:AD", 1)
     message("twitch", 1)
     time.sleep(1)
-    message("beats", "1010101010101001")
+    message("beats", "1111000011110101")
     time.sleep(1)
     message("play", 1)
     pass

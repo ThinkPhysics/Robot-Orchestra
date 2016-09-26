@@ -159,12 +159,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
     // trigger playback of stored beat pattern.
     // Loop through the beat array
     for ( int beat = 0 ; beat < N_BEATS ; beat++ ) {
-      // Oh, how I love C pointers. The following line took half an hour.
-      // ...and then didn't work.
-      // int this_beat = atoi(&beats[beat]);
-      // Back to comparing Strings, because *that's* efficient. Sigh.
-      // String this_beat = &beats[beat];
-      String this_beat = beatsString.charAt[beat];
+      String this_beat = String((char)payload[beat]);
       Serial.println(this_beat);
       if ( this_beat == "1" ) {
         twitch(myservo, angleTwitch); // Play a hit
