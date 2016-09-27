@@ -148,10 +148,13 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
   /* HANDLE RECEIVED BEAT SEQUENCE ****************************/
   if ( (topicString == "orchestra/beats") && active ) {
-     // process received beat pattern into beats array
-     payloadString.toCharArray(beats, N_BEATS);
-     // Serial.println(beats);
-     beatsString = beats;
+    // process received beat pattern into beats array
+//    payloadString.toCharArray(beats, N_BEATS);
+    // Serial.println(beats);
+    // beatsString = beats;
+    beatsString = payloadString;
+    Serial.print("BeatsString: ");
+    Serial.println(beatsString);
   }
 
   /* HANDLE PLAYBACK CUE **************************************/
@@ -159,19 +162,31 @@ void callback(char* topic, byte* payload, unsigned int length) {
     // trigger playback of stored beat pattern.
     // Loop through the beat array
     Serial.print("Playing pattern: ");
-    Serial.println(payloadString);
+    Serial.println(beatsString);
     for ( int beat = 0 ; beat < N_BEATS ; beat++ ) {
-      char this_beat = (char)payload[beat];
       Serial.print(beat);
       Serial.print(":");
-      Serial.print(this_beat);
-      if ( strcmp(&this_beat, "1") ) {
+      String thisBeat = String(beatsString.charAt(beat));
+//      Serial.print(beatsString.charAt(beat));
+      Serial.print(thisBeat);
+      if ( thisBeat == "1" ) {
         twitch(myservo, angleTwitch); // Play a hit
         Serial.println(F(" BONG!"));
       } else {
-        twitch(myservo, angleMiss);   // Play a miss
+        twitch(myservo, angleMiss);  // Play a miss
         Serial.println(F(" pish!"));
       }
+//      char this_beat = (char)payload[beat];
+//      Serial.print(beat);
+//      Serial.print(":");
+//      Serial.print(this_beat);
+//      if ( strcmp(&this_beat, "1") ) {
+//        twitch(myservo, angleTwitch); // Play a hit
+//        Serial.println(F(" BONG!"));
+//      } else {
+//        twitch(myservo, angleMiss);   // Play a miss
+//        Serial.println(F(" pish!"));
+//      }
     } 
     
     delay(150); // Give the servos time to move
