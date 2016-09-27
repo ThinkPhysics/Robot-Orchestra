@@ -165,7 +165,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
       Serial.print(beat);
       Serial.print(":");
       Serial.print(this_beat);
-      if ( (bool)this_beat ) {
+      if ( strcmp(&this_beat, "1") ) {
         twitch(myservo, angleTwitch); // Play a hit
         Serial.println(F(" BONG!"));
       } else {
