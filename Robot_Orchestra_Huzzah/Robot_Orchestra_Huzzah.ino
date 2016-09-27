@@ -158,15 +158,19 @@ void callback(char* topic, byte* payload, unsigned int length) {
   if ( (topicString == "orchestra/play") && active ) {
     // trigger playback of stored beat pattern.
     // Loop through the beat array
+    Serial.print("Playing pattern: ");
+    Serial.println(payloadString);
     for ( int beat = 0 ; beat < N_BEATS ; beat++ ) {
-      String this_beat = String((char)payload[beat]);
-      Serial.println(this_beat);
-      if ( this_beat == "1" ) {
+      char this_beat = (char)payload[beat];
+      Serial.print(beat);
+      Serial.print(":");
+      Serial.print(this_beat);
+      if ( (bool)this_beat ) {
         twitch(myservo, angleTwitch); // Play a hit
-        Serial.println(F("BONG!"));
+        Serial.println(F(" BONG!"));
       } else {
         twitch(myservo, angleMiss);   // Play a miss
-        Serial.println(F("pish!"));
+        Serial.println(F(" pish!"));
       }
     } 
     
