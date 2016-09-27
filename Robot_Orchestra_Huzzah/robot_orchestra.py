@@ -9,6 +9,7 @@ import time
 
 mqttc = mqtt.Client()
 
+
 def message(topic, payload):
     """Abstract out MQTT connection.
 

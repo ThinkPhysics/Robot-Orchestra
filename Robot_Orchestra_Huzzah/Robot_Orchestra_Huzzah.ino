@@ -1,12 +1,11 @@
 // Robot Orchestra workshop code – for Adafruit Huzzah network-enabled devices
 // 
 // This version pulls Adafruit Huzzah and MQTT code from the Wishing Well repo,
-// to produce a network-aware robot orchestra which receive beat patterns from
+// to produce a network-aware robot orchestra which receives beat patterns from
 // a central MQTT server.
-// As of August 2016, this is very much a work in progress/proof-of-concept
 
 // Author: Jonathan Sanderson, for Think Physics, Northumbria University
-// Version: 2016-08-22 incomplete/initial version
+// Version: 2016-09-27 First working version
 
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
@@ -60,146 +59,131 @@ const int bpm = 120;
 const int tempo = (int) ( 1000 / (bpm/60) ); // milliseconds
 
 void setup() {
-  // Setup code, runs once only:
-  Serial.begin(115200);
-  setup_wifi();
+    // Setup code, runs once only:
+    Serial.begin(115200);
+    setup_wifi();
 
-  // Get this Huzzah's MAC address and use it to register with the MQTT server
-  huzzahMACAddress = WiFi.macAddress();
-  skutterNameString = "skutter_" + huzzahMACAddress;
-  Serial.println(skutterNameString);
-  skutterNameString.toCharArray(skutterNameArray, 60);
-  subsTargetString = "orchestra/" + skutterNameString;
-  subsTargetString.toCharArray(subsTargetArray, 60);
-  for (int i = 0; i < 60; i++) {
-    Serial.print(subsTargetArray[i]);
-  }
-  Serial.println();
+    // Get this Huzzah's MAC address and use it to register with the MQTT server
+    huzzahMACAddress = WiFi.macAddress();
+    skutterNameString = "skutter_" + huzzahMACAddress;
+    Serial.println(skutterNameString);
+    skutterNameString.toCharArray(skutterNameArray, 60);
+    subsTargetString = "orchestra/" + skutterNameString;
+    subsTargetString.toCharArray(subsTargetArray, 60);
+    for (int i = 0; i < 60; i++) {
+        Serial.print(subsTargetArray[i]);
+    }
+    Serial.println();
 
-  client.setServer(mqtt_server, 1883);
-  client.setCallback(callback);
+    client.setServer(mqtt_server, 1883);
+    client.setCallback(callback);
 
-  myservo.attach(PIN_SERVO);
-  myservo.write(angleRest); // Set to zero speed so there's no servo kick on boot. Doesn't work.
+    myservo.attach(PIN_SERVO);
+    myservo.write(angleRest); // Set to zero speed so there's no servo kick on boot. Doesn't work.
 
 }
 
 void loop() {
-  // Call the MQTT client to poll for updates, reconnecting if necessary
-  // Handle messages via the callback function
-  if (!client.connected()) {
-    reconnect();
-  }
-  client.loop();
+    // Call the MQTT client to poll for updates, reconnecting if necessary
+    // Handle messages via the callback function
+    if (!client.connected()) {
+        reconnect();
+    }
+    client.loop();
 }
 
 
 // CALLBACK function; parses received messages and acts upon them.
 void callback(char* topic, byte* payload, unsigned int length) {
 
-  // Convert topic and message to C++ String types, for ease of handling
+    // Convert topic and message to C++ String types, for ease of handling
 
-  // message length gives us the length of the payload
-  String payloadString;
-  for (int i = 0; i < length; i++) {
-    payloadString += String((char)payload[i]);
-  }
-
-  // for the topic, we need to call strlen to find the length
-  String topicString;
-  for (int i = 0; i < strlen(topic); i++) {
-    topicString += String((char)topic[i]);
-  }
-
-  // Debug: print the (processed) received message to serial
-  Serial.print(F("Message arrived ["));
-  Serial.print(topicString);
-  Serial.print(F("] "));
-  Serial.println(payloadString);
-
-  // Now handle the possible messages, matching on topic
-
-  /* TARGET CHANGED ********************************************/
-  if (topicString == subsTargetString) {
-    Serial.println(F("Skutter target signal"));
-    // Check to see if this Skutter is disabled, else enable
-    if (payloadString == "False") {
-      active = false;
-      Serial.println(F("This Skutter is now inactive"));
-    } else {
-      active = true;
-      Serial.println(F("This Skutter is now ACTIVE!"));
+    // message length gives us the length of the payload
+    String payloadString;
+    for (int i = 0; i < length; i++) {
+        payloadString += String((char)payload[i]);
     }
-  }
 
-  /* HANDLE TWITCH *******************************************/
-  // This is mostly for testing purposes, but does allow entirely
-  // server-driven playback rather than transferring beat patterns
-  // and triggering playback in sync.
-  if ( (topicString == "orchestra/twitch") && active ) {
-    if ( payloadString == "1" ) {
-      Serial.println(F("BONG!"));
-      twitch(myservo, angleTwitch);
-    } else if ( payloadString == "0" ) {
-      twitch(myservo, angleMiss);
-      Serial.println(F("pish!"));
+    // for the topic, we need to call strlen to find the length
+    String topicString;
+    for (int i = 0; i < strlen(topic); i++) {
+        topicString += String((char)topic[i]);
     }
-  }
 
-  /* HANDLE RECEIVED BEAT SEQUENCE ****************************/
-  if ( (topicString == "orchestra/beats") && active ) {
-    // process received beat pattern into beats array
-//    payloadString.toCharArray(beats, N_BEATS);
-    // Serial.println(beats);
-    // beatsString = beats;
-    beatsString = payloadString;
-    Serial.print("BeatsString: ");
-    Serial.println(beatsString);
-  }
+    // Debug: print the (processed) received message to serial
+    Serial.print(F("Message arrived ["));
+    Serial.print(topicString);
+    Serial.print(F("] "));
+    Serial.println(payloadString);
 
-  /* HANDLE PLAYBACK CUE **************************************/
-  if ( (topicString == "orchestra/play") && active ) {
+    // Now handle the possible messages, matching on topic
+
+    /* TARGET CHANGED ********************************************/
+    if (topicString == subsTargetString) {
+        Serial.println(F("Skutter target signal"));
+        // Check to see if this Skutter is disabled, else enable
+        if (payloadString == "False") {
+            active = false;
+            Serial.println(F("This Skutter is now inactive"));
+        } else {
+            active = true;
+            Serial.println(F("This Skutter is now ACTIVE!"));
+        }
+    }
+
+     /* HANDLE TWITCH *******************************************/
+    // This is mostly for testing purposes, but does allow entirely
+    // server-driven playback rather than transferring beat patterns
+    // and triggering playback in sync.
+    if ( (topicString == "orchestra/twitch") && active ) {
+        if ( payloadString == "1" ) {
+            Serial.println(F("BONG!"));
+            twitch(myservo, angleTwitch);
+        } else if ( payloadString == "0" ) {
+            twitch(myservo, angleMiss);
+            Serial.println(F("pish!"));
+        }
+    }
+
+    /* HANDLE RECEIVED BEAT SEQUENCE ****************************/
+    if ( (topicString == "orchestra/beats") && active ) {
+        // Store received beat pattern in new String
+        beatsString = payloadString;
+    }
+
+    /* HANDLE PLAYBACK CUE **************************************/
     // trigger playback of stored beat pattern.
-    // Loop through the beat array
-    Serial.print("Playing pattern: ");
-    Serial.println(beatsString);
-    for ( int beat = 0 ; beat < N_BEATS ; beat++ ) {
-      Serial.print(beat);
-      Serial.print(":");
-      String thisBeat = String(beatsString.charAt(beat));
-//      Serial.print(beatsString.charAt(beat));
-      Serial.print(thisBeat);
-      if ( thisBeat == "1" ) {
-        twitch(myservo, angleTwitch); // Play a hit
-        Serial.println(F(" BONG!"));
-      } else {
-        twitch(myservo, angleMiss);  // Play a miss
-        Serial.println(F(" pish!"));
-      }
-//      char this_beat = (char)payload[beat];
-//      Serial.print(beat);
-//      Serial.print(":");
-//      Serial.print(this_beat);
-//      if ( strcmp(&this_beat, "1") ) {
-//        twitch(myservo, angleTwitch); // Play a hit
-//        Serial.println(F(" BONG!"));
-//      } else {
-//        twitch(myservo, angleMiss);   // Play a miss
-//        Serial.println(F(" pish!"));
-//      }
-    } 
+    if ( (topicString == "orchestra/play") && active ) {
+        // Confirm the beat pattern we're going to play
+        Serial.print("Playing pattern: ");
+        Serial.println(beatsString);
+        // Loop through the beat array
+        for ( int beat = 0 ; beat < N_BEATS ; beat++ ) {
+            // Get the individual beat (NB. neat to cast to String, since .charAt returns char
+            String thisBeat = String(beatsString.charAt(beat));
+            // Print the beat index and value      
+            Serial.print(beat);
+            Serial.print(":");
+            Serial.print(thisBeat);
+            if ( thisBeat == "1" ) {
+                twitch(myservo, angleTwitch); // Play a hit
+                Serial.println(F(" BONG!"));
+            } else {
+                twitch(myservo, angleMiss);  // Play a miss
+                Serial.println(F(" pish!"));
+            }
+            delay(150); // Give the servos time to move
+            // Return the servos to rest position
+            twitch(myservo, angleRest);
+            delay(tempo-(200)); // give the servos time to move back, correcting for desired tempo
+        } 
     
-    delay(150); // Give the servos time to move
-
-    // Return the servos to rest position
-    twitch(myservo, angleRest);
-    delay(tempo-(200)); // give the servos time to move back, correcting for desired tempo
-    // TODO: how do we stop playback?
+    
   }
 
 }
 
 
 void twitch(Servo &theServo, int angle) {
-  theServo.write(angle); // Move towards chosen angle
+    theServo.write(angle); // Move towards chosen angle
 }
