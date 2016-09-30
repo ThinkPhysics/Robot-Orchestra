@@ -22,9 +22,9 @@ def message(topic, payload):
 def setup():
     """Configure all the Skutters initially."""
     message("skutter_18:FE:34:FD:91:AD", 1)
-    # message("twitch", 1)
+    message("twitch", 1)
     # time.sleep(1)
-    message("beats", "1011010010110011")
+    message("beats", "10110011")
     # time.sleep(1)
     message("play", 1)
     pass

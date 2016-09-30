@@ -40,10 +40,9 @@ PubSubClient client(espClient);
 
 Servo myservo;
 
+// Number of beats in sequence (two bytes, so we'll run out of string storage first)
+unsigned int nbeats = 16;
 // Storage for beats array, to be stepped through
-// +1 to allow for NULL termination of received beat pattern
-const int N_BEATS = 16;
-char beats[N_BEATS+1] = {};
 String beatsString;
 
 // Define how far the servo moves
@@ -143,12 +142,18 @@ void callback(char* topic, byte* payload, unsigned int length) {
             twitch(myservo, angleMiss);
             Serial.println(F("pish!"));
         }
+        delay(150); // Give the servo time to move
+        // Return the servo to rest position
+        twitch(myservo, angleRest);        
     }
 
     /* HANDLE RECEIVED BEAT SEQUENCE ****************************/
     if ( (topicString == "orchestra/beats") && active ) {
-        // Store received beat pattern in new String
+        // Store received beat pattern in global String
         beatsString = payloadString;
+        nbeats = payloadString.length();
+        Serial.print("Sequence length received: ");
+        Serial.println(nbeats);
     }
 
     /* HANDLE PLAYBACK CUE **************************************/
@@ -158,7 +163,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
         Serial.print("Playing pattern: ");
         Serial.println(beatsString);
         // Loop through the beat array
-        for ( int beat = 0 ; beat < N_BEATS ; beat++ ) {
+        for ( int beat = 0 ; beat < nbeats ; beat++ ) {
             // Get the individual beat (NB. neat to cast to String, since .charAt returns char
             String thisBeat = String(beatsString.charAt(beat));
             // Print the beat index and value      
