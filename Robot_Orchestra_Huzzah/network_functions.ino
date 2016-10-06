@@ -24,11 +24,14 @@ void setup_wifi() {
 // Maintain MQTT broker connection, subscribe to topics on (re)connect
 void reconnect() {
   // Loop until we're reconnected
+  digitalWrite(00, HIGH);
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
     // Attempt to connect
+    digitalWrite(00, LOW);
     if (client.connect(skutterNameArray)) {
       Serial.println("connected");
+      client.publish("orchestra/announce", subsTargetArray);
       client.subscribe(subsTargetArray);
       client.subscribe("orchestra/twitch");
       client.subscribe("orchestra/beats");
@@ -38,6 +41,7 @@ void reconnect() {
       Serial.print(client.state());
       Serial.println(" try again in 5 seconds");
       // Wait 5 seconds before retrying
+      digitalWrite(00, HIGH);
       delay(5000);
     }
   }

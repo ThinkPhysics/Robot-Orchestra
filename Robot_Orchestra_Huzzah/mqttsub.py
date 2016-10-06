@@ -17,11 +17,12 @@ def on_connect(client, userdata, rc):
     client.subscribe("orchestra/twitch")
     client.subscribe("orchestra/beats")
     client.subscribe("orchestra/play")
+    # client.subscribe("orchestra/announce")
 
 
 def on_message(client, userdata, msg):
     """Output diagnostic when message sent via broker."""
-    print "Topic: ", msg.topic + '\nMessage: ' + msg.payload
+    print "Topic:", msg.topic + '  :  Message: ' + msg.payload
 
 client = mqtt.Client()
 client.on_connect = on_connect

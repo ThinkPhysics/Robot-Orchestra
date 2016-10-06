@@ -11,7 +11,7 @@
 #include <PubSubClient.h>
 #include <Servo.h>
 
-const char* ssid = "wishingwell";
+const char* ssid = "thinkphysics";
 const char* password = "thinkphysics1";
 // Stick the IP address of the MQTT server in the line below.
 // Find it by entering `ifconfig` at a Terminal prompt, and looking for
@@ -40,6 +40,7 @@ PubSubClient client(espClient);
 
 Servo myservo;
 
+
 // Number of beats in sequence (two bytes, so we'll run out of string storage first)
 unsigned int nbeats = 16;
 // Storage for beats array, to be stepped through
@@ -61,6 +62,10 @@ void setup() {
     // Setup code, runs once only:
     Serial.begin(115200);
     setup_wifi();
+    
+    // Set up on-board LEDs for diagnostics
+    pinMode(00, OUTPUT);
+    pinMode(02, OUTPUT);
 
     // Get this Huzzah's MAC address and use it to register with the MQTT server
     huzzahMACAddress = WiFi.macAddress();
@@ -171,13 +176,16 @@ void callback(char* topic, byte* payload, unsigned int length) {
             Serial.print(":");
             Serial.print(thisBeat);
             if ( thisBeat == "1" ) {
+                digitalWrite(02, HIGH);
                 twitch(myservo, angleTwitch); // Play a hit
                 Serial.println(F(" BONG!"));
             } else {
+                digitalWrite(02, HIGH);
                 twitch(myservo, angleMiss);  // Play a miss
                 Serial.println(F(" pish!"));
             }
             delay(150); // Give the servos time to move
+            digitalWrite(02, LOW);
             // Return the servos to rest position
             twitch(myservo, angleRest);
             delay(tempo-(200)); // give the servos time to move back, correcting for desired tempo
