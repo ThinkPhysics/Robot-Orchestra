@@ -6,11 +6,15 @@ Extensions include editing the code and reflashing the Arduino to amend the beat
 
 The resulting working is chaotic, noisy, collaborative, whimsical, and features participants contributing towards a shared goal.
 
-## Codebase & version history
+## Versions
 
-This is effectively version 2 of the code, with stubs/loops for handling more than two servos per Arduino. The resulting array assignment is slightly less clean than previous versions of the code, which may lead to more confusion/errors during workshops. We expect the code to evolve further.
+As of October 2016 we've checked in a whole new tree, which targets [Adafruit Huzzah](https://learn.adafruit.com/adafruit-huzzah-esp8266-breakout/overview) as the robot instrument microcontrollers. The robots connect to a wifi network, and through that to an MQTT server (typically [Mosquitto](https://mosquitto.org) running on a Mac or Raspberry Pi). The server is then scripted via the included Python code to issue beat patterns and playback cues to the connected robot instruments.
 
-New features over the (unpublished) version 1 code:
+The other directories are effectively version 2 of the code, with stubs/loops for handling more than two servos per Arduino. This is more complex than prior versions, but the added flexibility extends the workshop for more able students.
+
+For drop-in, family and primary school sessions we expect to continue with the Arduino-based v2 code. Our next objective is to test the Huzzah robots and codebase to see how successful the Python programming exercise is for secondary workshops.
+
+## Version history -- changes from 1.0 to 2.0
 
 * beats per minute / tempo calculations actually do what they're supposed to, rather than leading to negative delays. Which don't work so well, funnily enough.
 * Servo twitch code is now rolled into the main loop rather than incorporated in the helper function. While we liked the neatness of the latter, it made synchronised movement of two servos impossible to wrap our heads around. This does render the helper function more-or-less pointless, but I'm too proud of the object dereferencing to delete it just yet.
