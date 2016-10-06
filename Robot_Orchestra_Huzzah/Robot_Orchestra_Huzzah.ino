@@ -126,7 +126,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
     if (topicString == subsTargetString) {
         Serial.println(F("Skutter target signal"));
         // Check to see if this Skutter is disabled, else enable
-        if (payloadString == "False") {
+        if (payloadString == "0") {
             active = false;
             Serial.println(F("This Skutter is now inactive"));
         } else {
