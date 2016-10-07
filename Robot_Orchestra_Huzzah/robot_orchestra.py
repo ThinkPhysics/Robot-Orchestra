@@ -46,6 +46,6 @@ set_active(four)
 beats("00000000000000001010" + closing)
 # ... and so on
 
-# Finally command all instruments to play at once
+# Finally, command all instruments to play at once
 set_active(all)
 play()
