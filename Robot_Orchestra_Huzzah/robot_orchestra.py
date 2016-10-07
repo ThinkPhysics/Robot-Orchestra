@@ -1,6 +1,6 @@
 """Robot Orchestra control code.
 
-Distributes and commands network of robots to play instruments.
+Distributes beat patterns to a network of robots, then cues sequence playback.
 """
 import time
 from mod_orchestra import set_active, beats, play

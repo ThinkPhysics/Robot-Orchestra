@@ -1,4 +1,9 @@
-"""Listen for (and output) commands issued via MQTT broker."""
+"""Listen for robot announcements.
+
+When an instrument robot connects to the MQTT server, it announces itself.
+This code simply echoes those announcements, but in principle we could
+automatically update the instrument dictionary as robots join the orchestra.
+"""
 import paho.mqtt.client as mqtt
 
 

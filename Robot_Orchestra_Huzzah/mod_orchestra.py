@@ -1,7 +1,11 @@
 """Robot orchestra abstractions.
 
 Provides a simple language grammar for issuing beat patterns and playback
-cue to Robot Orchestra instruments, and handles MQTT messaging.
+cue to Robot Orchestra instruments, and handles MQTT messaging to distribute
+those commands.
+
+Can be straightforwardly extended to simplify grammar, which we leave as an
+exercise for workshop participants.
 """
 import paho.mqtt.client as mqtt
 import time

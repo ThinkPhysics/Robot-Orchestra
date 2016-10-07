@@ -1,3 +1,5 @@
+"""Dictionary of robot IDs for inclusion in other modules."""
+
 instruments = {"00": "skutter_18:FE:34:FD:91:AD",
                "01": "skutter_5C:CF:7F:01:5B:22",
                "02": "skutter_18:FE:34:FD:92:D1",
