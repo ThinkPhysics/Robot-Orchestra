@@ -31,13 +31,13 @@ def set_active(robots):
     # print robots
     # First set all robots inactive...
     for instrument in instruments:
-        print "Setting instrument " + instrument + " inactive"
+        # print "Setting instrument " + instrument + " inactive"
         message(instruments[instrument], 0)
         time.sleep(0.02)
     # ...now enable just the target robots
     for robot in robots:
         # print robot
-        print "Setting instrument " + robot + " ACTIVE"
+        # print "Setting instrument " + robot + " ACTIVE"
         message(instruments[robot], 1)
         time.sleep(0.02)
         # print "Instrument key:" + robot
