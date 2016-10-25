@@ -7,8 +7,8 @@ those commands.
 Can be straightforwardly extended to simplify grammar, which we leave as an
 exercise for workshop participants.
 """
-import paho.mqtt.client as mqtt
 import time
+import paho.mqtt.client as mqtt
 from instruments import instruments
 
 mqttc = mqtt.Client()
