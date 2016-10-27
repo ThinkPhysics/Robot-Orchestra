@@ -3,7 +3,7 @@
 Distributes beat patterns to a network of robots, then cues sequence playback.
 """
 import time
-from mod_orchestra import set_active, beats, play
+from mod_orchestra import send_beats, set_active, set_inactive, play
 
 
 # Set up instrument groups
@@ -21,31 +21,16 @@ NINE = ("09",)
 TEN = ("10",)
 ELEVEN = ("11",)
 # add your own groups here, for example:
-DRUMS = ("00", "04", "07")
-
-
-# First, make sure the beat pattern is zeroed out for all instruments
-set_active(ALL)
-beats("0000")
-time.sleep(0.2)
+DRUMS = ("00","11")
 
 # Here's a pattern we're going to reuse
 CLOSING = "1010011"
 # You could use similar things to define a chorus, an intro, and so on.
 
 # Now configure pattern for each instrument
-set_active(ZERO)
-beats("10100000000000000000" + CLOSING)
-set_active(ONE)
-beats("00001010000000000000" + CLOSING)
-set_active(TWO)
-beats("00000000101000000000" + CLOSING)
-set_active(THREE)
-beats("00000000000010100000" + CLOSING)
-set_active(FOUR)
-beats("00000000000000001010" + CLOSING)
+send_beats(DRUMS, "1010010010011")
+send_beats(FOUR, "0000100101011")
 # ... and so on
 
 # Finally, command all instruments to play at once
-set_active(ALL)
-play()
+play(ALL)
