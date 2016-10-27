@@ -23,13 +23,22 @@ ELEVEN = ("11",)
 # add your own groups here, for example:
 DRUMS = ("00","11")
 
-# Here's a pattern we're going to reuse
-CLOSING = "1010011"
+# Here are patterns we're going to reuse
+CLOSING = "01"
+BEAT_1 = "1000"
+BEAT_2 = "0100"
+BEAT_3 = "0010"
+BEAT_4 = "0001"
 # You could use similar things to define a chorus, an intro, and so on.
 
+#Remember to clear the beat patterns before starting!
+send_beats(ALL, "0")
+
 # Now configure pattern for each instrument
-send_beats(DRUMS, "1010010010011")
-send_beats(FOUR, "0000100101011")
+send_beats(ONE, BEAT_1 + CLOSING + BEAT_4 + CLOSING + "1000100010001")
+send_beats(TWO, BEAT_2 + CLOSING + BEAT_3 + CLOSING + "0010000000101")
+send_beats(THREE, BEAT_3 + CLOSING + BEAT_2 + CLOSING + "0101001001011")
+send_beats(FOUR, BEAT_4 + CLOSING + BEAT_1 + CLOSING + "0000010100001")
 # ... and so on
 
 # Finally, command all instruments to play at once
