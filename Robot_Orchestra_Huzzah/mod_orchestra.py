@@ -14,7 +14,6 @@ from instruments import instruments
 mqttc = mqtt.Client()
 mqtt_server = "10.0.1.4"
 
-
 def message(topic, payload):
     """Abstract out MQTT connection.
 
@@ -23,6 +22,10 @@ def message(topic, payload):
     mqttc.connect(mqtt_server, 1883)
     mqttc.publish("orchestra/" + topic, payload)
     # time.sleep(0.2)
+    
+def twitch(robots):
+    set_active(robots)
+    message("twitch", 1)
 
 def set_active(robots):
     """Activates a set of robots"""

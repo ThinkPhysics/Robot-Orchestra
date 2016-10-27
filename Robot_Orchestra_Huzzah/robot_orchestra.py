@@ -24,12 +24,18 @@ ELEVEN = ("11",)
 DRUMS = ("00","11")
 
 # Here's a pattern we're going to reuse
-CLOSING = "1010011"
+CLOSING = "01"
+BEAT_1 = "1000"
+BEAT_2 = "0100"
+BEAT_3 = "0010"
+BEAT_4 = "0001"
 # You could use similar things to define a chorus, an intro, and so on.
 
 # Now configure pattern for each instrument
-send_beats(DRUMS, "1010010010011")
-send_beats(FOUR, "0000100101011")
+send_beats(ONE, "1000010000110")
+send_beats(TWO,"01000100010100")
+send_beats(THREE,"00100100100010")
+send_beats(FOUR,"0001010100010")
 # ... and so on
 
 # Finally, command all instruments to play at once
