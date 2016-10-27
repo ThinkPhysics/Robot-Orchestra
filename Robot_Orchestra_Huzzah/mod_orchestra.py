@@ -51,9 +51,3 @@ def play(robots):
     set_active(robots)
     message("play", 1)
     set_inactive(robots)
-
-"""Clears the beat patterns of all of the robots"""
-set_active(instruments)
-message("beats", "0000")
-time.sleep(0.02)
-set_inactive(instruments)
