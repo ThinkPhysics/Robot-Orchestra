@@ -34,7 +34,6 @@ with open('TwinkleTwinkle.txt', 'r') as music:
     for line in total:
         beats = line.split(":")
         robot = (beats[0]).replace(':','')
-        print robot
         pattern = (beats[1]).replace(' ', '')
         pattern = pattern.replace('\n','')
 # Compares the number in the txt file with the items in the dictionary 'players'
