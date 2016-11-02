@@ -24,33 +24,37 @@ def message(topic, payload):
     mqttc.publish("orchestra/" + topic, payload)
     # time.sleep(0.2)
 
+
+def twitch(robots):
+    """Send all active robots a twitch command."""
+    set_active(robots)
+    message("twitch", 1)
+
+
 def set_active(robots):
-    """Activates a set of robots"""
+    """Activate a set of robots."""
     for robot in robots:
-        message(instruments[robot],1)
+        message(instruments[robot], 1)
         time.sleep(0.02)
+
 
 def set_inactive(robots):
-    """Deactivates a set of robots"""
+    """Deactivate a set of robots."""
     for robot in robots:
-        message(instruments[robot],0)
+        message(instruments[robot], 0)
         time.sleep(0.02)
 
-def send_beats (robots, beat_pattern):
-    """Sends a beat pattern (specified in robot_orchestra.py) to a robot"""
+
+def send_beats(robots, beat_pattern):
+    """Send a beat pattern to a robot."""
     set_active(robots)
     message("beats", beat_pattern)
     time.sleep(0.02)
     set_inactive(robots)
 
+
 def play(robots):
-    """Activates the robots and then issues the play command."""
+    """Activate all robots, then issue the play command."""
     set_active(robots)
     message("play", 1)
     set_inactive(robots)
-
-"""Clears the beat patterns of all of the robots"""
-set_active(instruments)
-message("beats", "0000")
-time.sleep(0.02)
-set_inactive(instruments)

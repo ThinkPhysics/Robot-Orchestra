@@ -3,13 +3,11 @@
 Distributes beat patterns to a network of robots, then cues sequence playback.
 """
 # import time
-from mod_orchestra import send_beats, play
 
 
 # Set up instrument groups
 ALL = ("00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11")
 # clears the robots' beat patterns
-send_beats(ALL, "0")
 
 
 # Dictionary holds name and corresponding number for each instrument.
@@ -33,8 +31,7 @@ PLAYERS = {"ZERO": ("00",),
 # Open seperate text file to specify beat patterns to send
 with open('TwinkleTwinkle.txt', 'r') as music:
     lines = music.readlines()
-
-    # Iterate over lines in input
+    # Split text file into smaller fragments
     for line in lines:
         # Break each input line between robot identifier and pattern
         data = line.split(":")
@@ -42,15 +39,10 @@ with open('TwinkleTwinkle.txt', 'r') as music:
         # robot = (data[0]).replace(':', '')  // Removed since unnecessary?
 
         # Get robot target tuple from PLAYERS dictionary
-        robo_ids = PLAYERS[robot]
+        robo_num = PLAYERS[robot]
 
         # Remove white space & EOL from beat pattern
         pattern = (data[1]).replace(' ', '')
         pattern = pattern.replace('\n', '')
 
-        # Now send the beat pattern to the target robots
         print robot + " to play " + pattern
-        send_beats(robo_ids, pattern)
-
-# Command playback on all instruments
-play(ALL)
