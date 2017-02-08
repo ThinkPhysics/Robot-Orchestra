@@ -7,7 +7,8 @@ from mod_orchestra import send_beats, play
 
 
 # Set up instrument groups
-ALL = ("00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11")
+ALL = ("00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11",
+       "12", "13", "14")
 # clears the robots' beat patterns
 send_beats(ALL, "0")
 
@@ -27,6 +28,9 @@ PLAYERS = {"ZERO": ("00",),
            "NINE": ("09",),
            "TEN": ("10",),
            "ELEVEN": ("11",),
+           "TWELVE": ("12",),
+           "THIRTEEN": ("13",),
+           "FOURTEEN": ("14",),
            "DRUMS": ("00", "01")
            }
 

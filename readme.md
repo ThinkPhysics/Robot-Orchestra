@@ -1,12 +1,14 @@
 # Robot Orchestra
 
-This code is pre-flashed onto Arduino or Huzzah microcontrollers used in [Think Physics](http://thinkphysics.org)' 'Robot Orchestra' workshop and drop-in session. Participants build a simple blink circuit to learn their way around breadboard, then add a servo -- which immediately starts twitching with a regular beat pattern. They then use glue, masking tape, cardboard, chopsticks, and other craft materials to mount their servo so it 'plays' (ie. hits) a musical instrument. Over the course of the workshop, a 'robotic orchestra' of variously ridiculous contraptions is assembled by participants as a collective endeavour.
+This code is pre-flashed onto [Arduino](https://www.arduino.cc) or [Huzzah](https://www.adafruit.com/product/2471) microcontrollers used in [Think Physics](http://thinkphysics.org)' 'Robot Orchestra' workshop and drop-in session. Participants build a simple blink circuit to learn their way around breadboard, then add a servo – which immediately starts twitching with a regular beat pattern. They then use glue, masking tape, cardboard, chopsticks, and other craft materials to mount their servo so it 'plays' (ie. hits) a musical instrument. Over the course of the workshop, a 'robotic orchestra' of variously ridiculous contraptions is assembled by participants as a collective endeavour.
 
-Extensions include editing the code and reflashing the Arduino to amend the beat pattern, and introducing a second servo per Arduino. A more advanced version of the orchestra uses wifi-enabled Huzzah-based robots, an MQTT broker for networked message-passing, and a Python script to distribute beat patterns to wireless robots and cue playback.
+Extensions include editing the code and reflashing the Arduino to amend the beat pattern, and introducing a second servo per Arduino. A more advanced version of the orchestra uses wifi-enabled Huzzah-based robots, an [MQTT](http://mqtt.org) broker for networked message-passing, and a Python script to distribute beat patterns to individual robots and cue playback.
 
 The resulting working is chaotic, noisy, collaborative, whimsical, and features participants contributing towards a shared goal.
 
 ## Versions
+
+February 2017: minor tweaks and changes in preparation for a bigger overhaul shortly.
 
 November 2016: more new features! Thanks to @Auraxis012, the Python controller for the wireless version of the Orchestra now handles input files, which read rather like punched cards, and the Python controller can be used to patch specific beat sequences to groups of robots.
 
@@ -34,8 +36,12 @@ TODO: Provide some example results!
 
 ## Next steps
 
-* Looping of playback for wifi robots. This could be done at the Python end (by calculating beat sequence playback time, which may be prone to error), or within the Huzzah code (which presents challenges for updating the sequence while staying in sync). The objective is to be able to live-update the beat sequences, Sonic Pi-style.
-* Port to Feather Huzzah.
+* Looping of playback for wifi robots. This could be done at the Python end (by calculating beat sequence playback time, which may be prone to error), or within the Huzzah code (which presents challenges for updating the sequence while staying in sync). The objective is to be able to live-update the beat sequences during playback.
+* Port to WeMos D1 mini boards
+* 'Patch board' functionality to assign individual robots to groups/tracks. This already exists as named lists in the Python code (eg. `DRUMS`), but group/track assignment could be broken out into a language grammar like the sequence script.
+* Interface for patch board - assign robots to groups interactively.
+* Sequencing controller, based on the [UNTZtroment](https://www.adafruit.com/product/1999).
+* Playback start/stop button controls, via GPIOZero on controlling Pi.
 
 ## Credits
 
