@@ -11,8 +11,8 @@
 #include <PubSubClient.h>
 #include <Servo.h>
 
-const char* ssid = "thinkphysics";
-const char* password = "thinkphysics1";
+const char* ssid = "nustem";
+const char* password = "nustem123";
 // Stick the IP address of the MQTT server in the line below.
 // Find it by entering `ifconfig` at a Terminal prompt, and looking for
 // the wlan0 ipv4 address.
@@ -36,7 +36,7 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 
 // Pin definitions
-#define PIN_SERVO 12
+#define PIN_SERVO D1
 
 Servo myservo;
 
