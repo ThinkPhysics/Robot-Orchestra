@@ -9,10 +9,10 @@ exercise for workshop participants.
 """
 import time
 import paho.mqtt.client as mqtt
-from instruments import instruments
+from instruments import instruments, ALL
 
 mqttc = mqtt.Client()
-mqtt_server = "10.0.1.4"
+mqtt_server = "10.0.1.5"
 
 
 def message(topic, payload):
