@@ -11,5 +11,8 @@ instruments = {"00": "skutter_18:FE:34:FD:91:AD",
                "08": "skutter_18:FE:34:F4:D0:7B",
                "09": "skutter_18:FE:34:F4:D4:79",
                "10": "skutter_5C:CF:7F:0E:31:16",
-               "11": "skutter_5C:CF:7F:0E:2C:EA"
+               "11": "skutter_5C:CF:7F:0E:2C:EA",
+               "12": "skutter_5C:CF:7F:01:59:5B",
+               "13": "skutter_5C:CF:7F:19:9A:5A",
+               "14": "skutter_18:FE:34:FD:91:B9"
                }
