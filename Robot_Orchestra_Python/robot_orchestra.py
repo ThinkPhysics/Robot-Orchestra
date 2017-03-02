@@ -6,8 +6,6 @@ Distributes beat patterns to a network of robots, then cues sequence playback.
 from mod_orchestra import send_beats, play
 # from instruments import instruments, ALL
 
-
-
 # Set up instrument groups
 ALL = ("00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11",
        "12", "13", "14")
@@ -61,3 +59,4 @@ with open('default.txt', 'r') as music:
 
 # Command playback on all instruments
 play(ALL)
+print ">>>> Go!"

@@ -14,6 +14,6 @@ send_beats(ROBOTS, "0")
 
 # tells the robots to beat once very five seconds
 while True:
-    print "Bong!"
     twitch(ROBOTS)
-    time.sleep(5)
+    print "Bong!"
+    time.sleep(1)
