@@ -4,11 +4,14 @@ Distributes beat patterns to a network of robots, then cues sequence playback.
 """
 # import time
 from mod_orchestra import send_beats, play
+# from instruments import instruments, ALL
+
 
 
 # Set up instrument groups
 ALL = ("00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11",
        "12", "13", "14")
+
 # clears the robots' beat patterns
 send_beats(ALL, "0")
 
@@ -35,7 +38,7 @@ PLAYERS = {"ZERO": ("00",),
            }
 
 # Open seperate text file to specify beat patterns to send
-with open('TwinkleTwinkle.txt', 'r') as music:
+with open('default.txt', 'r') as music:
     lines = music.readlines()
 
     # Iterate over lines in input
