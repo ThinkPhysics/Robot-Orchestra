@@ -1,11 +1,11 @@
-// Robot Orchestra workshop code – for Adafruit Huzzah network-enabled devices
+// Robot Orchestra workshop code – for Wemos D1 mini network-enabled devices
 // 
 // This version pulls Adafruit Huzzah and MQTT code from the Wishing Well repo,
 // to produce a network-aware robot orchestra which receives beat patterns from
 // a central MQTT server.
 
-// Author: Jonathan Sanderson, for Think Physics, Northumbria University
-// Version: 2016-09-27 First working version
+// Author: Jonathan Sanderson, for NUSTEM, Northumbria University
+// Version: 2017-03-02 First working version
 
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
