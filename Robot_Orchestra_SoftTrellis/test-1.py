@@ -4,15 +4,17 @@
 # ...which isn't a great surprise, since the numbers are all made up.
 
 from guizero import App, Waffle
-from tkinter import *
+from tkinter import Frame
 
 app = App()
+
 
 def callback(event):
     print("Clicked at: ", event.x, event.y)
 
+
 # Set the waffle to have a memory
-my_waffle = Waffle(app, remember=True)
+my_waffle = Waffle(App, remember=True)
 
 my_waffle.set_pixel(2, 1, "red")
 
