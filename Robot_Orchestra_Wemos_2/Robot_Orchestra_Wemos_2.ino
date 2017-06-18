@@ -11,10 +11,8 @@
 #include <PubSubClient.h>
 #include <Servo.h>
 
-//const char* ssid = "nustem";
-//const char* password = "nustem123";
-const char* ssid = "BadgerNet-2G";
-const char* password = "badgercwtch";
+const char* ssid = "nustem";
+const char* password = "nustem123";
 
 // Stick the IP address of the MQTT server in the line below.
 // Find it by entering `ifconfig` at a Terminal prompt, and looking for
