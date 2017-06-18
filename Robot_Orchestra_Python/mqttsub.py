@@ -11,6 +11,7 @@ def on_connect(client, userdata, rc):
     client.subscribe("orchestra/twitch")
     client.subscribe("orchestra/beats")
     client.subscribe("orchestra/play")
+    client.subscribe("#")
     # client.subscribe("orchestra/announce")
 
 
@@ -22,5 +23,6 @@ client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
 
-client.connect('10.0.1.5', 1883)
+# client.connect('10.0.1.5', 1883)
+client.connect('192.168.0.8', 1883)
 client.loop_forever()
