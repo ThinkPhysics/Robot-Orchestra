@@ -28,7 +28,10 @@ int units;
 int twos;
 int fours;
 
-// String variables in which to store the received messages
+// Each robot has a unique name, generated from the hardware MAC address.
+// These variables will store those names.
+String huzzahMACAddress;
+String skutterNameString;
 String subsTargetString;
 char subsTargetArray[60];
 
@@ -79,8 +82,12 @@ void setup() {
     myChannel = 0;
     myOldChannel = 0;
 
-    // Subscribe to the orchestra channel
-    subsTargetString = "orchestra/playset";
+    // Get this Huzzah's MAC address and use it to register with the MQTT server
+    huzzahMACAddress = WiFi.macAddress();
+    skutterNameString = "skutter_" + huzzahMACAddress;
+    Serial.println(skutterNameString);
+    skutterNameString.toCharArray(skutterNameArray, 60);
+    subsTargetString = "orchestra/" + skutterNameString;
     subsTargetString.toCharArray(subsTargetArray, 60);
     for (int i = 0; i < 60; i++) {
         Serial.print(subsTargetArray[i]);
@@ -140,17 +147,17 @@ void callback(char* topic, byte* payload, unsigned int length) {
     // Now handle the possible messages, matching on topic
 
     /* TARGET CHANGED ********************************************/
-//    if (topicString == subsTargetString) {
-//        Serial.println(F("Beat announced!"));
-//        // Check to see if this Skutter is disabled, else enable
-//        if (payloadString == "0") {
-//            active = false;
-//            Serial.println(F("This Skutter is now inactive"));
-//        } else {
-//            active = true;
-//            Serial.println(F("This Skutter is now ACTIVE!"));
-//        }
-//    }
+   if (topicString == subsTargetString) {
+       Serial.println(F("Beat announced!"));
+       // Check to see if this Skutter is disabled, else enable
+       if (payloadString == "0") {
+           active = false;
+           Serial.println(F("This Skutter is now inactive"));
+       } else {
+           active = true;
+           Serial.println(F("This Skutter is now ACTIVE!"));
+       }
+   }
 
      /* HANDLE TWITCH *******************************************/
     // This is mostly for testing purposes, but does allow entirely
@@ -169,10 +176,10 @@ void callback(char* topic, byte* payload, unsigned int length) {
         twitch(myservo, angleRest);
     }
 
-    /* HANDLE RECEIVED BEAT QUEUE *******************************/
+    /* HANDLE RECEIVED BEAT SET - LIVE PLAYBACK *****************/
     if (topicString == "orchestra/playset") {
         String thisBeat = String(payloadString.charAt(myChannel));
-        // Serial.println(thisBeat);
+         Serial.println(thisBeat);
         if ( thisBeat == "1" ) {
             Serial.println(F("BONG!"));
             twitch(myservo, angleTwitch);
@@ -223,7 +230,6 @@ void callback(char* topic, byte* payload, unsigned int length) {
             twitch(myservo, angleRest);
             delay(tempo-(200)); // give the servos time to move back, correcting for desired tempo
         }
-
 
   }
 

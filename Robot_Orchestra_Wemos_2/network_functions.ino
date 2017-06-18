@@ -36,6 +36,8 @@ void reconnect() {
       client.subscribe("orchestra/twitch");
       client.subscribe("orchestra/beats");
       client.subscribe("orchestra/play");
+      // Subscribe to the global playback channel
+      client.subscribe("orchestra/playset");
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
@@ -46,4 +48,3 @@ void reconnect() {
     }
   }
 }
-

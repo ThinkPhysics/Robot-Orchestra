@@ -1,5 +1,5 @@
 // Robot Orchestra workshop code – for Wemos D1 mini network-enabled devices
-// 
+//
 // This version pulls Adafruit Huzzah and MQTT code from the Wishing Well repo,
 // to produce a network-aware robot orchestra which receives beat patterns from
 // a central MQTT server.
@@ -13,18 +13,25 @@
 
 const char* ssid = "nustem";
 const char* password = "nustem123";
+
 // Stick the IP address of the MQTT server in the line below.
 // Find it by entering `ifconfig` at a Terminal prompt, and looking for
 // the wlan0 ipv4 address.
-const char* mqtt_server = "10.0.1.5";
+// const char* mqtt_server = "10.0.1.5";
+const char* mqtt_server = "192.168.0.8";
+
+String subString;
+char skutterNameArray[60];
+int myChannel;
+int myOldChannel;
+int units;
+int twos;
+int fours;
 
 // Each robot has a unique name, generated from the hardware MAC address.
 // These variables will store those names.
 String huzzahMACAddress;
 String skutterNameString;
-char skutterNameArray[60];
-
-// String variables in which to store the received messages
 String subsTargetString;
 char subsTargetArray[60];
 
@@ -62,10 +69,18 @@ void setup() {
     // Setup code, runs once only:
     Serial.begin(115200);
     setup_wifi();
-    
+
     // Set up on-board LEDs for diagnostics
     pinMode(00, OUTPUT);
     pinMode(02, OUTPUT);
+
+    pinMode(D5, INPUT_PULLUP);
+    pinMode(D6, INPUT_PULLUP);
+    pinMode(D7, INPUT_PULLUP);
+
+    // default to the zeroth channel for playback
+    myChannel = 0;
+    myOldChannel = 0;
 
     // Get this Huzzah's MAC address and use it to register with the MQTT server
     huzzahMACAddress = WiFi.macAddress();
@@ -94,6 +109,15 @@ void loop() {
         reconnect();
     }
     client.loop();
+    units = !digitalRead(D5);
+    twos = !digitalRead(D6);
+    fours = !digitalRead(D7);
+    myChannel = (4 * fours) + (2 * twos) + units;
+    if (myChannel != myOldChannel) {
+      Serial.print(F(">>> myChannel changed to: "));
+      Serial.println(myChannel);
+      myOldChannel = myChannel;
+    }
 }
 
 
@@ -123,17 +147,17 @@ void callback(char* topic, byte* payload, unsigned int length) {
     // Now handle the possible messages, matching on topic
 
     /* TARGET CHANGED ********************************************/
-    if (topicString == subsTargetString) {
-        Serial.println(F("Skutter target signal"));
-        // Check to see if this Skutter is disabled, else enable
-        if (payloadString == "0") {
-            active = false;
-            Serial.println(F("This Skutter is now inactive"));
-        } else {
-            active = true;
-            Serial.println(F("This Skutter is now ACTIVE!"));
-        }
-    }
+   if (topicString == subsTargetString) {
+       Serial.println(F("Beat announced!"));
+       // Check to see if this Skutter is disabled, else enable
+       if (payloadString == "0") {
+           active = false;
+           Serial.println(F("This Skutter is now inactive"));
+       } else {
+           active = true;
+           Serial.println(F("This Skutter is now ACTIVE!"));
+       }
+   }
 
      /* HANDLE TWITCH *******************************************/
     // This is mostly for testing purposes, but does allow entirely
@@ -149,7 +173,23 @@ void callback(char* topic, byte* payload, unsigned int length) {
         }
         delay(150); // Give the servo time to move
         // Return the servo to rest position
-        twitch(myservo, angleRest);        
+        twitch(myservo, angleRest);
+    }
+
+    /* HANDLE RECEIVED BEAT SET - LIVE PLAYBACK *****************/
+    if (topicString == "orchestra/playset") {
+        String thisBeat = String(payloadString.charAt(myChannel));
+         Serial.println(thisBeat);
+        if ( thisBeat == "1" ) {
+            Serial.println(F("BONG!"));
+            twitch(myservo, angleTwitch);
+        } else if ( thisBeat == "0" ) {
+            twitch(myservo, angleMiss);
+            Serial.println(F("pish!"));
+        }
+        delay(150); // Give the servo time to move
+        // Return the servo to rest position
+        twitch(myservo, angleRest);
     }
 
     /* HANDLE RECEIVED BEAT SEQUENCE ****************************/
@@ -171,7 +211,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
         for ( int beat = 0 ; beat < nbeats ; beat++ ) {
             // Get the individual beat (NB. neat to cast to String, since .charAt returns char
             String thisBeat = String(beatsString.charAt(beat));
-            // Print the beat index and value      
+            // Print the beat index and value
             Serial.print(beat);
             Serial.print(":");
             Serial.print(thisBeat);
@@ -189,9 +229,8 @@ void callback(char* topic, byte* payload, unsigned int length) {
             // Return the servos to rest position
             twitch(myservo, angleRest);
             delay(tempo-(200)); // give the servos time to move back, correcting for desired tempo
-        } 
-    
-    
+        }
+
   }
 
 }

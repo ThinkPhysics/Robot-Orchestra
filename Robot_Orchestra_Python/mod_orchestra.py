@@ -12,7 +12,8 @@ import paho.mqtt.client as mqtt
 from instruments import instruments, ALL
 
 mqttc = mqtt.Client()
-mqtt_server = "10.0.1.5"
+# mqtt_server = "10.0.1.5"
+mqtt_server = "192.168.0.8"
 
 
 def message(topic, payload):
