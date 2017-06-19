@@ -40,11 +40,6 @@ TODO: Provide some example results!
 
 ## Next steps
 
-* Looping of playback for wifi robots. This could be done at the Python end (by calculating beat sequence playback time, which may be prone to error), or within the Huzzah code (which presents challenges for updating the sequence while staying in sync). The objective is to be able to live-update the beat sequences during playback.
-* Port to WeMos D1 mini boards
-* 'Patch board' functionality to assign individual robots to groups/tracks. This already exists as named lists in the Python code (eg. `DRUMS`), but group/track assignment could be broken out into a language grammar like the sequence script.
-* Interface for patch board - assign robots to groups interactively.
-* Sequencing controller, based on the [UNTZtroment](https://www.adafruit.com/product/1999).
 * Playback start/stop button controls, via GPIOZero on controlling Pi.
 
 ## Credits
