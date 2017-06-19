@@ -6,6 +6,10 @@ those commands.
 
 Can be straightforwardly extended to simplify grammar, which we leave as an
 exercise for workshop participants.
+
+Requires `sudo pip install paho-mqtt` on a vanilla Raspbian install, as of
+2017-06-17. Also `sudo apt install mosquitto`, if you want to run the broker
+locally.
 """
 import time
 import paho.mqtt.client as mqtt
