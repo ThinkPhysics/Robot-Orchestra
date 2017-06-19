@@ -1,3 +1,9 @@
+"""Threading/timer class test code.
+
+Lightly adapted from StackExchange user MestreLion:
+https://stackoverflow.com/questions/3393612/run-certain-code-every-n-seconds
+"""
+
 from threading import Timer
 from time import sleep
 
@@ -34,6 +40,7 @@ class RepeatedTimer(object):
 
 
 def hello(name):
+    """This is the function we're going to call via the timer trigger."""
     print "Hello %s!" % name
 
 
@@ -41,7 +48,7 @@ output = "World"
 print "starting..."
 rt = RepeatedTimer(0.01, hello, output)
 try:
-    sleep(5)
+    sleep(5) # Your long-running job goes here.
     output = "Jonathan"
     # Have to stop and restart for data to update
     rt.stop()

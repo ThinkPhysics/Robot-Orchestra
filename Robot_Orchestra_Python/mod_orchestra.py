@@ -16,6 +16,7 @@ import paho.mqtt.client as mqtt
 from instruments import instruments, ALL
 
 mqttc = mqtt.Client()
+# Edit the following line with the IP address of your MQTT broker.
 # mqtt_server = "10.0.1.5"
 mqtt_server = "192.168.0.8"
 
@@ -63,3 +64,8 @@ def play(robots):
     set_active(robots)
     message("play", 1)
     set_inactive(robots)
+
+
+def playset(beatset):
+    """Sends the current beat to all 8 channels at once."""
+    message("playset", beatset)

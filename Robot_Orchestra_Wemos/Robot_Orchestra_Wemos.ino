@@ -17,8 +17,8 @@ const char* password = "nustem123";
 // Stick the IP address of the MQTT server in the line below.
 // Find it by entering `ifconfig` at a Terminal prompt, and looking for
 // the wlan0 ipv4 address.
-// const char* mqtt_server = "10.0.1.5";
-const char* mqtt_server = "192.168.0.8";
+const char* mqtt_server = "10.0.1.5";
+// const char* mqtt_server = "192.168.0.8";
 
 String subString;
 char skutterNameArray[60];
