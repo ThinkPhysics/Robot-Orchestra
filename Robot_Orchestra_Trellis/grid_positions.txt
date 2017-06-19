@@ -1,3 +1,9 @@
+# Trellis grid location numbering.
+
+This is for the HELLA UNTZtrument, which is a 16x8 grid of buttons
+comprised of a 4x2 grid of 4x4 Trellis modules. They're addressed sequentially
+on the I2C bus.
+
 [  0,   1,   2,   3,  16,  17,  18,  19,  32,  33,  34,  35,  48,  49,  50,  51],
 [  4,   5,   6,   7,  20,  21,  22,  23,  36,  37,  38,  39,  52,  53,  54,  55],
 [  8,   9,  10,  11,  24,  25,  26,  27,  40,  41,  42,  43,  56,  57,  58,  59],
