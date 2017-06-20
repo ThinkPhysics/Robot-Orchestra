@@ -17,8 +17,8 @@ from instruments import instruments, ALL
 
 mqttc = mqtt.Client()
 # Edit the following line with the IP address of your MQTT broker.
-# mqtt_server = "10.0.1.5"
-mqtt_server = "192.168.0.8"
+mqtt_server = "10.0.1.5"
+# mqtt_server = "192.168.0.8"
 
 
 def message(topic, payload):
