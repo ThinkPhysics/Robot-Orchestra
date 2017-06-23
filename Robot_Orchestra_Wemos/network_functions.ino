@@ -24,11 +24,11 @@ void setup_wifi() {
 // Maintain MQTT broker connection, subscribe to topics on (re)connect
 void reconnect() {
   // Loop until we're reconnected
-  digitalWrite(00, HIGH);
+  digitalWrite(02, HIGH);
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
     // Attempt to connect
-    digitalWrite(00, LOW);
+    digitalWrite(02, LOW);
     if (client.connect(skutterNameArray)) {
       Serial.println("connected");
       client.publish("orchestra/announce", subsTargetArray);

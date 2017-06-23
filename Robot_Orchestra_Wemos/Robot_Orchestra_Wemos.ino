@@ -71,7 +71,7 @@ void setup() {
     setup_wifi();
 
     // Set up on-board LEDs for diagnostics
-    pinMode(00, OUTPUT);
+    pinMode(BUILTIN_LED, OUTPUT);
     pinMode(02, OUTPUT);
 
     pinMode(D5, INPUT_PULLUP);
@@ -181,7 +181,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
         String thisBeat = String(payloadString.charAt(myChannel));
         Serial.println(thisBeat);
         // Turn the indicator LED on
-        digitalWrite(02, HIGH);
+        digitalWrite(BUILTIN_LED, HIGH);
         if ( thisBeat == "1" ) {
             Serial.println(F("BONG!"));
             twitch(myservo, angleTwitch);
@@ -194,7 +194,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
         // Return the servo to rest position
         twitch(myservo, angleRest);
         // ...and turn the LED off
-        digitalWrite(02, LOW);
+        digitalWrite(BUILTIN_LED, LOW);
     }
 
     /* HANDLE RECEIVED BEAT SEQUENCE ****************************/
