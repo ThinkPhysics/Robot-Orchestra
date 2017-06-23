@@ -14,12 +14,15 @@ from threading import Timer
 import Adafruit_Trellis
 import numpy as np
 from mod_orchestra import playset
+from gpiozero import Button
 
 # Global variables. Which is nasty, right?
 currentBeat = 0 # Keep track of which beat we're playing.
 tempo = 120  # Barfs if we go much above 120; playBeat doesn't complete before
              # it's next called. Ugh.
 bpm = 60.0 / tempo
+startStopButton = Button(5,pull_up=True,bounce_time=0.2)
+running = True
 
 class RepeatedTimer(object):
     """Simple timer class, from StackExchange (obviously).
@@ -205,5 +208,16 @@ try:
             # timer anyway, and too frequent writeDisplays tend to
             # send things a bit funky.
             # trellis.writeDisplay()
+        if startStopButton.is_pressed:
+            if running:
+                # Stop playback!
+                print('>>> STOP')
+                rt.stop()
+                running = False
+            else:
+                # Start playback!
+                print('>>> START')
+                rt.start()
+                running = True
 finally:
     rt.stop()
