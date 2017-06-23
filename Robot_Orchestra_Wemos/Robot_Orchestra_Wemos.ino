@@ -77,7 +77,7 @@ void setup() {
     pinMode(D5, INPUT_PULLUP);
     pinMode(D6, INPUT_PULLUP);
     pinMode(D7, INPUT_PULLUP);
-
+    
     // default to the zeroth channel for playback
     myChannel = 0;
     myOldChannel = 0;
@@ -179,7 +179,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
     /* HANDLE RECEIVED BEAT SET - LIVE PLAYBACK *****************/
     if (topicString == "orchestra/playset") {
         String thisBeat = String(payloadString.charAt(myChannel));
-         Serial.println(thisBeat);
+        Serial.println(thisBeat);
+        // Turn the indicator LED on
+        digitalWrite(02, HIGH);
         if ( thisBeat == "1" ) {
             Serial.println(F("BONG!"));
             twitch(myservo, angleTwitch);
@@ -187,9 +189,12 @@ void callback(char* topic, byte* payload, unsigned int length) {
             twitch(myservo, angleMiss);
             Serial.println(F("pish!"));
         }
+        
         delay(150); // Give the servo time to move
         // Return the servo to rest position
         twitch(myservo, angleRest);
+        // ...and turn the LED off
+        digitalWrite(02, LOW);
     }
 
     /* HANDLE RECEIVED BEAT SEQUENCE ****************************/

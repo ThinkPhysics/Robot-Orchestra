@@ -21,7 +21,6 @@ tempo = 120  # Barfs if we go much above 120; playBeat doesn't complete before
              # it's next called. Ugh.
 bpm = 60.0 / tempo
 
-
 class RepeatedTimer(object):
     """Simple timer class, from StackExchange (obviously).
        Credit: user MestreLion,
