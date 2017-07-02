@@ -17,18 +17,20 @@ from mod_orchestra import playset
 from gpiozero import Button
 
 # Global variables. Which is nasty, right?
-currentBeat = 0 # Keep track of which beat we're playing.
+currentBeat = 0  # Keep track of which beat we're playing.
 tempo = 120  # Barfs if we go much above 120; playBeat doesn't complete before
              # it's next called. Ugh.
 bpm = 60.0 / tempo
-startStopButton = Button(5,pull_up=True,bounce_time=0.2)
+startStopButton = Button(5, pull_up=True, bounce_time=0.2)
 running = True
+
 
 class RepeatedTimer(object):
     """Simple timer class, from StackExchange (obviously).
-       Credit: user MestreLion,
-       https://stackoverflow.com/questions/3393612
+
+    Credit: user MestreLion, https://stackoverflow.com/questions/3393612
     """
+
     def __init__(self, interval, function, *args):
         """Initialize the timer object."""
         self._timer     = None
@@ -172,7 +174,6 @@ def playBeat():
     currentBeat += 1
     if currentBeat > 15:
         currentBeat = 0
-
 
 
 # ...and now we can actually run some code.
