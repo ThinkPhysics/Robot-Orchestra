@@ -3,7 +3,7 @@
 # Install the Python library:
 # https://github.com/tdicola/Adafruit_Trellis_Python
 
-# See notes about I2C here:
+# See notes about I2C here:
 # https://github.com/adafruit/Adafruit-Raspberry-Pi-Python-Code
 
 # This code heavily based on Adafruit example code by Limor Fried & Tony DiCola
@@ -41,13 +41,15 @@ trellis.begin((0x70, I2C_BUS), (0x71, I2C_BUS), (0x72, I2C_BUS),
               (0x73, I2C_BUS), (0x74, I2C_BUS), (0x75, I2C_BUS),
               (0x76, I2C_BUS), (0x77, I2C_BUS))
 
+delay = 0.005
+
 # Light all the LEDs in order
 for i in range(numKeys):
     trellis.setLED(i)
     trellis.writeDisplay()
-    time.sleep(0.05)
+    time.sleep(delay)
 # then turn them off again
 for i in range(numKeys):
     trellis.clrLED(i)
     trellis.writeDisplay()
-    time.sleep(0.05)
+    time.sleep(delay)

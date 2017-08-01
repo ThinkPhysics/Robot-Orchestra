@@ -7,6 +7,11 @@
     Based in part on Adafruit Trellis example code:
     Written by Limor Fried/Ladyada for Adafruit Industries.
     Python port created by Tony DiCola (tony@tonydicola.com).
+    
+    Helpful I2C stuff:
+    Check connections & status:
+        sudo i2cdetect -y 1
+    
 """
 
 import time
@@ -18,10 +23,14 @@ from gpiozero import Button
 
 # Global variables. Which is nasty, right?
 currentBeat = 0  # Keep track of which beat we're playing.
-tempo = 120  # Barfs if we go much above 120; playBeat doesn't complete before
+tempo = 100  # Barfs if we go much above 120; playBeat doesn't complete before
              # it's next called. Ugh.
+             # UPDATE: as of 2017-07, this limit appears to be 90bpm
+             #         even with reduced beat indicator flashing.
+             #         Implication is a performance regression in an
+             #         OS update?
 bpm = 60.0 / tempo
-startStopButton = Button(5, pull_up=True, bounce_time=0.2)
+startStopButton = Button(5, pull_up=True, bounce_time=0.4)
 running = True
 
 
@@ -119,8 +128,7 @@ buttonGrid = np.array(
 #         trellis.setLED(buttonGrid[row, column])
 #         trellis.writeDisplay()
 #         time.sleep(0.01)
-#
-# for row in range(8):
+# for row in range(8):\s
 #     for column in range(16):
 #         trellis.clrLED(buttonGrid[row, column])
 #         trellis.writeDisplay()
@@ -144,7 +152,7 @@ def playBeat():
     # Concatenate array into string, for MQTT sending
     # array2string adds square braces; slice to remove them.
     curStateString = np.array2string(curState, separator='')[1:-1]
-    # print curStateString
+    print currentBeat, curStateString
 
     # flash column header
     # It's rather too slow to flash the whole column, which is what I wanted,
@@ -154,8 +162,10 @@ def playBeat():
     # look smooth. I should probably test the current state and amend
     # the flash animation based on the result. But then... would the two
     # code paths actually take the same period of time?
-    trellis.clrLED(target)
-    trellis.writeDisplay()
+    
+    # Changed 2017-7 to simpify animation, giving performance headroom.
+    # trellis.clrLED(target)
+    # trellis.writeDisplay()
     trellis.setLED(target)
     trellis.writeDisplay()
 
@@ -190,7 +200,7 @@ rt = RepeatedTimer(bpm, playBeat)
 # The main loop now only needs to handle button presses.
 try:
     while True:
-        time.sleep(0.08)
+        time.sleep(0.10)
 
         # If a button was just pressed or released...
         if trellis.readSwitches():
