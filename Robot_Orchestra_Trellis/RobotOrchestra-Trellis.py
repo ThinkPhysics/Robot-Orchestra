@@ -23,14 +23,14 @@ from gpiozero import Button
 
 # Global variables. Which is nasty, right?
 currentBeat = 0  # Keep track of which beat we're playing.
-tempo = 100  # Barfs if we go much above 120; playBeat doesn't complete before
+tempo = 120  # Barfs if we go much above 120; playBeat doesn't complete before
              # it's next called. Ugh.
              # UPDATE: as of 2017-07, this limit appears to be 90bpm
              #         even with reduced beat indicator flashing.
              #         Implication is a performance regression in an
              #         OS update?
 bpm = 60.0 / tempo
-startStopButton = Button(5, pull_up=True, bounce_time=0.4)
+startStopButton = Button(5, pull_up=True, bounce_time=0.3)
 running = True
 
 
@@ -164,8 +164,8 @@ def playBeat():
     # code paths actually take the same period of time?
     
     # Changed 2017-7 to simpify animation, giving performance headroom.
-    # trellis.clrLED(target)
-    # trellis.writeDisplay()
+    trellis.clrLED(target)
+    trellis.writeDisplay()
     trellis.setLED(target)
     trellis.writeDisplay()
 
@@ -188,6 +188,7 @@ def playBeat():
 
 # ...and now we can actually run some code.
 print('Press Ctrl-C to quit.')
+print('>>> IMPORTANT: ENSURE SPI IS DISABLED IN Pi CONFIG!')
 
 # Reset the Trellis array
 trellis.clear()
@@ -200,7 +201,7 @@ rt = RepeatedTimer(bpm, playBeat)
 # The main loop now only needs to handle button presses.
 try:
     while True:
-        time.sleep(0.10)
+        time.sleep(0.08)
 
         # If a button was just pressed or released...
         if trellis.readSwitches():
