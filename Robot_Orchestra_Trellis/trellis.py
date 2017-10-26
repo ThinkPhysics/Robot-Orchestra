@@ -3,7 +3,7 @@
 # Install the Python library:
 # https://github.com/tdicola/Adafruit_Trellis_Python
 
-# See notes about I2C here:
+# See notes about I2C here:
 # https://github.com/adafruit/Adafruit-Raspberry-Pi-Python-Code
 
 # This code heavily based on Adafruit example code by Limor Fried & Tony DiCola

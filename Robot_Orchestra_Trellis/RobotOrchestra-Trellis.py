@@ -7,6 +7,9 @@
     Based in part on Adafruit Trellis example code:
     Written by Limor Fried/Ladyada for Adafruit Industries.
     Python port created by Tony DiCola (tony@tonydicola.com).
+
+    Requires Adafruit Python GPIO libraries:
+    https://github.com/adafruit/Adafruit_Python_GPIO
 """
 
 import time
